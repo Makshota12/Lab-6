@@ -3,6 +3,7 @@ package com.example.lab6.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lab6.data.PersonDao
+import com.example.lab6.data.PersonRepository
 import com.example.lab6.model.PersonEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -11,19 +12,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PersonViewModel @Inject constructor(
-    private val personDao: PersonDao
+    private val repository: PersonRepository
 ) : ViewModel() {
-    val allPersons: Flow<List<PersonEntity>> = personDao.getAll()
+    val allPersons: Flow<List<PersonEntity>> = repository.getAllPersons()
+
+    suspend fun getPersonById(id: Int): PersonEntity? = repository.getPersonById(id)
 
     fun addPerson(person: PersonEntity) = viewModelScope.launch {
-        personDao.insert(person)
+        repository.addPerson(person)
     }
 
     fun updatePerson(person: PersonEntity) = viewModelScope.launch {
-        personDao.update(person)
+        repository.updatePerson(person)
     }
 
     fun deletePerson(person: PersonEntity) = viewModelScope.launch {
-        personDao.delete(person)
+        repository.deletePerson(person)
     }
 }

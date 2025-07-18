@@ -21,4 +21,7 @@ interface PersonDao {
 
     @Delete
     suspend fun delete(person: PersonEntity)
+
+    @Query("SELECT * FROM persons WHERE id = :id")
+    suspend fun getById(id: Int): PersonEntity?
 }
